@@ -9,6 +9,7 @@ import { Sidebar } from "./components/Sidebar";
 import { Footer } from "./components/Footer";
 
 import ProjectsPage from "./features/projects/ProjectsPage";
+import { ProjectDetailPage } from "./features/projects/ProjectDetailPage";
 
 // Create a single QueryClient instance at the application level (NOT inside component functions)
 const queryClient = new QueryClient({
@@ -32,7 +33,8 @@ function App() {
               <Routes>
                 <Route path="/" element={<ProjectsPage />} />
                 <Route path="/projects" element={<ProjectsPage />} />
-                {/* Placeholder routes for future pages */}
+                {/* Project detail route - uses dynamic routing */}
+                <Route path="/projects/:projectId" element={<ProjectDetailPage />} />
                 <Route path="/assets" element={<div className="p-8"><h1>Assets (Coming Soon)</h1></div>} />
                 <Route path="/settings" element={<div className="p-8"><h1>Settings (Coming Soon)</h1></div>} />
               </Routes>
