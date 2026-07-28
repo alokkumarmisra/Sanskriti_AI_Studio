@@ -13,6 +13,18 @@ interface ProjectActionsProps {
 export function ProjectActions({ projectId, projectName, onEdit, onDelete }: ProjectActionsProps) {
   return (
     <div className="flex items-center gap-2">
+      {/* View Details Button */}
+      <Link 
+        to={`/projects/${projectId}`}
+        title={`View details for ${projectName}`}
+        className="p-2 text-primary hover:text-primary-foreground hover:bg-primary/10 rounded-md transition-colors font-medium"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M9 18l6-6-6-6" />
+          <path d="M3 15h8" />
+        </svg>
+      </Link>
+      
       {onEdit && (
         <button
           onClick={onEdit}
@@ -25,6 +37,7 @@ export function ProjectActions({ projectId, projectName, onEdit, onDelete }: Pro
           </svg>
         </button>
       )}
+      
       {onDelete && (
         <button
           onClick={onDelete}
