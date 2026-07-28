@@ -1,0 +1,37 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: sanskriti-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: Sanskriti_AI_Studio
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: sanskriti-backend
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/Sanskriti_AI_Studio
+      LM_STUDIO_HOST: ${LM_STUDIO_HOST:-localhost}
+      COMFYUI_HOST: ${COMFYUI_HOST:-localhost}
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: sanskriti-frontend
+    ports:
+      - "5173:4173"
+
+volumes:
+  db_data:

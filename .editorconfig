@@ -1,0 +1,39 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env
+
+# Node modules
+node_modules/
+
+# Build outputs
+dist/
+build/
+out/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Mac
+.DS_Store
+
+# Python egg info
+*.egg-info/
+
+# Windows thumbnails
+*.thumb*
+
+# Python pycache and compiled files
+*.pyc
+
+# Project specific exclusions
+src/

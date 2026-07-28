@@ -1,0 +1,1 @@
+# Core package for Sanskriti AI Studio backend
