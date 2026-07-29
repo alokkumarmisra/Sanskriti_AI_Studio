@@ -1,4 +1,4 @@
-"""Pydantic schemas for Projects API."""
+"""Pydantic schemas for Projects and Lyrics APIs."""
 
 from datetime import datetime
 from uuid import UUID
@@ -52,3 +52,57 @@ class ProjectsListResponse(BaseModel):
     success: bool = True
     data: list[ProjectRead]
     message: str = "Projects retrieved successfully"
+
+
+# ============================================
+# LYRICS SCHEMAS
+# ============================================
+
+class LyricsBase(BaseModel):
+    """Lyrics data model without database fields."""
+
+    title: str | None = None
+    content: str
+    language: str = "English"
+    status: str = "active"
+
+
+class LyricsCreate(LyricsBase):
+    """Request schema for creating a lyrics entry."""
+
+    project_id: UUID
+
+
+class LyricsUpdate(BaseModel):
+    """Request schema for updating a lyrics entry."""
+
+    title: str | None = None
+    content: str | None = None
+    language: str | None = None
+    status: str | None = None
+
+
+class LyricsRead(BaseModel):
+    """Response schema for a lyrics entry with database fields.
+
+    Used when returning lyrics data from API endpoints.
+    """
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    project_id: UUID
+    title: str | None = None
+    content: str
+    language: str | None = None
+    status: str
+    created_at: datetime
+    updated_at: datetime
+
+
+class LyricsListResponse(BaseModel):
+    """Response schema for listing lyrics."""
+
+    success: bool = True
+    data: list[LyricsRead]
+    message: str = "Lyrics retrieved successfully"
