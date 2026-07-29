@@ -6,6 +6,7 @@ import type { Project } from "../../types/project";
 import { useProjectQuery, useUpdateProjectMutation, useDeleteProjectMutation } from "../../api/projects";
 import EditProjectDialog from "./EditProjectDialog";
 import DeleteConfirmationDialog from "./DeleteConfirmationDialog";
+import { LyricsSection } from "./LyricsSection";
 
 export function ProjectDetailPage() {
   const { projectId } = useParams<{ projectId: string }>();
@@ -302,6 +303,9 @@ export function ProjectDetailPage() {
           {project.project_type || "General"} Project
         </span>
       </div>
+
+      {/* Lyrics Section */}
+      <LyricsSection projectId={project.id} />
 
       {/* Edit Project Dialog */}
       {project && (
