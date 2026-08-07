@@ -1,9 +1,10 @@
 {
   "includePaths": [
     "C:/Users/admin/AppData/Local/Programs/Python/Python314/Lib/site-packages",
-    "backend/.venv/Lib/site-packages"
+    ".venv/Lib/site-packages"
   ],
   "extraPaths": [
-    "./ai_agents/scripts"
+    "./ai_agents/scripts",
+    "./scripts"
   ]
 }

@@ -1,0 +1,13 @@
+{
+  "language": "en",
+  "words": [
+    "lmstudio",
+    "LMStudio"
+  ],
+  "ignorePaths": [
+    "**/__pycache__/**",
+    "**/*.pyc",
+    "**/node_modules/**",
+    "**/.git/**"
+  ]
+}
