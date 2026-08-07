@@ -1,0 +1,10 @@
+{
+  "includePaths": [
+    "playwright",
+    "C:/Users/admin/AppData/Local/Programs/Python/Python314/Lib/site-packages"
+  ],
+  "extraPaths": [
+    "./scripts",
+    ".."
+  ]
+}

@@ -1,0 +1,454 @@
+{
+  "successful_validations": [
+    {
+      "stage": "backend_build",
+      "task_id": "",
+      "milestone": "",
+      "status": "PASS",
+      "start_time": "2026-08-05T20:33:19.797424+00:00",
+      "end_time": "2026-08-05T20:33:20.654200+00:00",
+      "duration_ms": 856,
+      "logs": [
+        "Checking backend build...",
+        "Backend build validation passed"
+      ],
+      "errors": [],
+      "warnings": [],
+      "suggested_actions": []
+    },
+    {
+      "stage": "backend_build",
+      "task_id": "",
+      "milestone": "",
+      "status": "PASS",
+      "start_time": "2026-08-05T20:33:19.797424+00:00",
+      "end_time": "2026-08-05T20:33:20.654200+00:00",
+      "duration_ms": 856,
+      "logs": [
+        "Checking backend build...",
+        "Backend build validation passed"
+      ],
+      "errors": [],
+      "warnings": [],
+      "suggested_actions": []
+    },
+    {
+      "stage": "documentation_validation",
+      "task_id": "",
+      "milestone": "",
+      "status": "PASS",
+      "start_time": "2026-08-05T20:33:24.940975+00:00",
+      "end_time": "2026-08-05T20:33:24.941188+00:00",
+      "duration_ms": 0,
+      "logs": [
+        "AI Context is up-to-date with recent steps"
+      ],
+      "errors": [],
+      "warnings": [],
+      "suggested_actions": []
+    },
+    {
+      "stage": "documentation_validation",
+      "task_id": "",
+      "milestone": "",
+      "status": "PASS",
+      "start_time": "2026-08-05T20:33:24.940975+00:00",
+      "end_time": "2026-08-05T20:33:24.941188+00:00",
+      "duration_ms": 0,
+      "logs": [
+        "AI Context is up-to-date with recent steps"
+      ],
+      "errors": [],
+      "warnings": [],
+      "suggested_actions": []
+    },
+    {
+      "stage": "acceptance_criteria",
+      "task_id": "",
+      "milestone": "",
+      "status": "PASS",
+      "start_time": "2026-08-05T20:33:24.941196+00:00",
+      "end_time": "2026-08-05T20:33:24.948345+00:00",
+      "duration_ms": 7,
+      "logs": [
+        "Acceptance criteria found in current task"
+      ],
+      "errors": [],
+      "warnings": [],
+      "suggested_actions": []
+    },
+    {
+      "stage": "acceptance_criteria",
+      "task_id": "",
+      "milestone": "",
+      "status": "PASS",
+      "start_time": "2026-08-05T20:33:24.941196+00:00",
+      "end_time": "2026-08-05T20:33:24.948345+00:00",
+      "duration_ms": 7,
+      "logs": [
+        "Acceptance criteria found in current task"
+      ],
+      "errors": [],
+      "warnings": [],
+      "suggested_actions": []
+    },
+    {
+      "stage": "backend_build",
+      "task_id": "",
+      "milestone": "",
+      "status": "PASS",
+      "start_time": "2026-08-06T05:55:46.064129+00:00",
+      "end_time": "2026-08-06T05:55:49.092526+00:00",
+      "duration_ms": 3028,
+      "logs": [
+        "Checking backend build...",
+        "Backend build validation passed"
+      ],
+      "errors": [],
+      "warnings": [],
+      "suggested_actions": []
+    },
+    {
+      "stage": "backend_build",
+      "task_id": "",
+      "milestone": "",
+      "status": "PASS",
+      "start_time": "2026-08-06T05:55:46.064129+00:00",
+      "end_time": "2026-08-06T05:55:49.092526+00:00",
+      "duration_ms": 3028,
+      "logs": [
+        "Checking backend build...",
+        "Backend build validation passed"
+      ],
+      "errors": [],
+      "warnings": [],
+      "suggested_actions": []
+    },
+    {
+      "stage": "documentation_validation",
+      "task_id": "",
+      "milestone": "",
+      "status": "PASS",
+      "start_time": "2026-08-06T05:55:53.456706+00:00",
+      "end_time": "2026-08-06T05:55:53.456916+00:00",
+      "duration_ms": 0,
+      "logs": [
+        "AI Context is up-to-date with recent steps"
+      ],
+      "errors": [],
+      "warnings": [],
+      "suggested_actions": []
+    },
+    {
+      "stage": "documentation_validation",
+      "task_id": "",
+      "milestone": "",
+      "status": "PASS",
+      "start_time": "2026-08-06T05:55:53.456706+00:00",
+      "end_time": "2026-08-06T05:55:53.456916+00:00",
+      "duration_ms": 0,
+      "logs": [
+        "AI Context is up-to-date with recent steps"
+      ],
+      "errors": [],
+      "warnings": [],
+      "suggested_actions": []
+    },
+    {
+      "stage": "acceptance_criteria",
+      "task_id": "",
+      "milestone": "",
+      "status": "PASS",
+      "start_time": "2026-08-06T05:55:53.456928+00:00",
+      "end_time": "2026-08-06T05:55:53.463620+00:00",
+      "duration_ms": 6,
+      "logs": [
+        "Acceptance criteria found in current task"
+      ],
+      "errors": [],
+      "warnings": [],
+      "suggested_actions": []
+    },
+    {
+      "stage": "acceptance_criteria",
+      "task_id": "",
+      "milestone": "",
+      "status": "PASS",
+      "start_time": "2026-08-06T05:55:53.456928+00:00",
+      "end_time": "2026-08-06T05:55:53.463620+00:00",
+      "duration_ms": 6,
+      "logs": [
+        "Acceptance criteria found in current task"
+      ],
+      "errors": [],
+      "warnings": [],
+      "suggested_actions": []
+    }
+  ],
+  "failed_validations": [
+    {
+      "stage": "frontend_build",
+      "task_id": "",
+      "milestone": "",
+      "status": "FAIL",
+      "start_time": "2026-08-05T20:33:20.654212+00:00",
+      "end_time": "2026-08-05T20:33:20.655015+00:00",
+      "duration_ms": 0,
+      "logs": [
+        "Checking frontend build...",
+        "Error during frontend build validation: [WinError 2] The system cannot find the file specified"
+      ],
+      "errors": [
+        "[WinError 2] The system cannot find the file specified"
+      ],
+      "warnings": [],
+      "suggested_actions": [],
+      "failure_reason": "[WinError 2] The system cannot find the file specified"
+    },
+    {
+      "stage": "frontend_build",
+      "task_id": "",
+      "milestone": "",
+      "status": "FAIL",
+      "start_time": "2026-08-05T20:33:20.654212+00:00",
+      "end_time": "2026-08-05T20:33:20.655015+00:00",
+      "duration_ms": 0,
+      "logs": [
+        "Checking frontend build...",
+        "Error during frontend build validation: [WinError 2] The system cannot find the file specified"
+      ],
+      "errors": [
+        "[WinError 2] The system cannot find the file specified"
+      ],
+      "warnings": [],
+      "suggested_actions": [],
+      "failure_reason": "[WinError 2] The system cannot find the file specified"
+    },
+    {
+      "stage": "integration_tests",
+      "task_id": "",
+      "milestone": "",
+      "status": "FAIL",
+      "start_time": "2026-08-05T20:33:20.655897+00:00",
+      "end_time": "2026-08-05T20:33:20.678836+00:00",
+      "duration_ms": 22,
+      "logs": [],
+      "errors": [
+        "Tests failed (see logs)"
+      ],
+      "warnings": [],
+      "suggested_actions": [],
+      "failure_reason": "Tests failed (see logs)"
+    },
+    {
+      "stage": "integration_tests",
+      "task_id": "",
+      "milestone": "",
+      "status": "FAIL",
+      "start_time": "2026-08-05T20:33:20.655897+00:00",
+      "end_time": "2026-08-05T20:33:20.678836+00:00",
+      "duration_ms": 22,
+      "logs": [],
+      "errors": [
+        "Tests failed (see logs)"
+      ],
+      "warnings": [],
+      "suggested_actions": [],
+      "failure_reason": "Tests failed (see logs)"
+    },
+    {
+      "stage": "database_validation",
+      "task_id": "",
+      "milestone": "",
+      "status": "FAIL",
+      "start_time": "2026-08-05T20:33:24.763003+00:00",
+      "end_time": "2026-08-05T20:33:24.940964+00:00",
+      "duration_ms": 177,
+      "logs": [
+        "Checking database connectivity...",
+        "Cannot connect to database: (psycopg2.OperationalError) connection to server at \"localhost\" (::1), port 5432 failed: FATAL:  database \"sanskriti\" does not exist\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)"
+      ],
+      "errors": [
+        "Database connection failed: (psycopg2.OperationalError) connection to server at \"localhost\" (::1), port 5432 failed: FATAL:  database \"sanskriti\" does not exist\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)"
+      ],
+      "warnings": [],
+      "suggested_actions": [],
+      "failure_reason": "Database connection failed: (psycopg2.OperationalError) connection to server at \"localhost\" (::1), port 5432 failed: FATAL:  database \"sanskriti\" does not exist\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)"
+    },
+    {
+      "stage": "database_validation",
+      "task_id": "",
+      "milestone": "",
+      "status": "FAIL",
+      "start_time": "2026-08-05T20:33:24.763003+00:00",
+      "end_time": "2026-08-05T20:33:24.940964+00:00",
+      "duration_ms": 177,
+      "logs": [
+        "Checking database connectivity...",
+        "Cannot connect to database: (psycopg2.OperationalError) connection to server at \"localhost\" (::1), port 5432 failed: FATAL:  database \"sanskriti\" does not exist\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)"
+      ],
+      "errors": [
+        "Database connection failed: (psycopg2.OperationalError) connection to server at \"localhost\" (::1), port 5432 failed: FATAL:  database \"sanskriti\" does not exist\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)"
+      ],
+      "warnings": [],
+      "suggested_actions": [],
+      "failure_reason": "Database connection failed: (psycopg2.OperationalError) connection to server at \"localhost\" (::1), port 5432 failed: FATAL:  database \"sanskriti\" does not exist\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)"
+    },
+    {
+      "stage": "frontend_build",
+      "task_id": "",
+      "milestone": "",
+      "status": "FAIL",
+      "start_time": "2026-08-06T05:55:49.092539+00:00",
+      "end_time": "2026-08-06T05:55:49.093369+00:00",
+      "duration_ms": 0,
+      "logs": [
+        "Checking frontend build...",
+        "Error during frontend build validation: [WinError 2] The system cannot find the file specified"
+      ],
+      "errors": [
+        "[WinError 2] The system cannot find the file specified"
+      ],
+      "warnings": [],
+      "suggested_actions": [],
+      "failure_reason": "[WinError 2] The system cannot find the file specified"
+    },
+    {
+      "stage": "frontend_build",
+      "task_id": "",
+      "milestone": "",
+      "status": "FAIL",
+      "start_time": "2026-08-06T05:55:49.092539+00:00",
+      "end_time": "2026-08-06T05:55:49.093369+00:00",
+      "duration_ms": 0,
+      "logs": [
+        "Checking frontend build...",
+        "Error during frontend build validation: [WinError 2] The system cannot find the file specified"
+      ],
+      "errors": [
+        "[WinError 2] The system cannot find the file specified"
+      ],
+      "warnings": [],
+      "suggested_actions": [],
+      "failure_reason": "[WinError 2] The system cannot find the file specified"
+    },
+    {
+      "stage": "integration_tests",
+      "task_id": "",
+      "milestone": "",
+      "status": "FAIL",
+      "start_time": "2026-08-06T05:55:49.094190+00:00",
+      "end_time": "2026-08-06T05:55:49.114054+00:00",
+      "duration_ms": 19,
+      "logs": [],
+      "errors": [
+        "Tests failed (see logs)"
+      ],
+      "warnings": [],
+      "suggested_actions": [],
+      "failure_reason": "Tests failed (see logs)"
+    },
+    {
+      "stage": "integration_tests",
+      "task_id": "",
+      "milestone": "",
+      "status": "FAIL",
+      "start_time": "2026-08-06T05:55:49.094190+00:00",
+      "end_time": "2026-08-06T05:55:49.114054+00:00",
+      "duration_ms": 19,
+      "logs": [],
+      "errors": [
+        "Tests failed (see logs)"
+      ],
+      "warnings": [],
+      "suggested_actions": [],
+      "failure_reason": "Tests failed (see logs)"
+    },
+    {
+      "stage": "database_validation",
+      "task_id": "",
+      "milestone": "",
+      "status": "FAIL",
+      "start_time": "2026-08-06T05:55:53.268791+00:00",
+      "end_time": "2026-08-06T05:55:53.456694+00:00",
+      "duration_ms": 187,
+      "logs": [
+        "Checking database connectivity...",
+        "Cannot connect to database: (psycopg2.OperationalError) connection to server at \"localhost\" (::1), port 5432 failed: FATAL:  database \"sanskriti\" does not exist\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)"
+      ],
+      "errors": [
+        "Database connection failed: (psycopg2.OperationalError) connection to server at \"localhost\" (::1), port 5432 failed: FATAL:  database \"sanskriti\" does not exist\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)"
+      ],
+      "warnings": [],
+      "suggested_actions": [],
+      "failure_reason": "Database connection failed: (psycopg2.OperationalError) connection to server at \"localhost\" (::1), port 5432 failed: FATAL:  database \"sanskriti\" does not exist\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)"
+    },
+    {
+      "stage": "database_validation",
+      "task_id": "",
+      "milestone": "",
+      "status": "FAIL",
+      "start_time": "2026-08-06T05:55:53.268791+00:00",
+      "end_time": "2026-08-06T05:55:53.456694+00:00",
+      "duration_ms": 187,
+      "logs": [
+        "Checking database connectivity...",
+        "Cannot connect to database: (psycopg2.OperationalError) connection to server at \"localhost\" (::1), port 5432 failed: FATAL:  database \"sanskriti\" does not exist\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)"
+      ],
+      "errors": [
+        "Database connection failed: (psycopg2.OperationalError) connection to server at \"localhost\" (::1), port 5432 failed: FATAL:  database \"sanskriti\" does not exist\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)"
+      ],
+      "warnings": [],
+      "suggested_actions": [],
+      "failure_reason": "Database connection failed: (psycopg2.OperationalError) connection to server at \"localhost\" (::1), port 5432 failed: FATAL:  database \"sanskriti\" does not exist\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)"
+    }
+  ],
+  "retry_counts": {
+    "": {
+      "frontend_build": 4,
+      "integration_tests": 4,
+      "database_validation": 4
+    }
+  },
+  "average_durations": {
+    "backend_build": [
+      856,
+      856,
+      3028,
+      3028
+    ],
+    "documentation_validation": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "acceptance_criteria": [
+      7,
+      7,
+      6,
+      6
+    ]
+  },
+  "common_failures": {
+    "frontend_build_[WinError 2] The system cannot find the file speci": {
+      "count": 4,
+      "stage": "frontend_build",
+      "reason": "[WinError 2] The system cannot find the file specified",
+      "first_seen": "2026-08-05T20:33:20.654212+00:00"
+    },
+    "integration_tests_Tests failed (see logs)": {
+      "count": 4,
+      "stage": "integration_tests",
+      "reason": "Tests failed (see logs)",
+      "first_seen": "2026-08-05T20:33:20.655897+00:00"
+    },
+    "database_validation_Database connection failed: (psycopg2.OperationalE": {
+      "count": 4,
+      "stage": "database_validation",
+      "reason": "Database connection failed: (psycopg2.OperationalError) connection to server at \"localhost\" (::1), port 5432 failed: FATAL:  database \"sanskriti\" does not exist\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)",
+      "first_seen": "2026-08-05T20:33:24.763003+00:00"
+    }
+  },
+  "last_updated": null
+}

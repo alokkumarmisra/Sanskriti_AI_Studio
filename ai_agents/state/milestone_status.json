@@ -1,0 +1,12 @@
+{
+  "plan_id": "PLAN-20260730230450",
+  "status_counts": {
+    "pending": 1,
+    "running": 0,
+    "completed": 0,
+    "failed": 0,
+    "blocked": 0,
+    "skipped": 0,
+    "total_queued": 1
+  }
+}

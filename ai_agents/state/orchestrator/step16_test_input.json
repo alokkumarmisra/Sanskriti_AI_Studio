@@ -1,0 +1,28 @@
+{
+    "task_id": "STEP-ORCHESTRATOR-SAFE-TASK-001",
+    "task_name": "Safe Test - Analyze Current Project Documentation and Report Milestone",
+    "description": "Analyze the current project documentation and report the current milestone and next task without modifying any source code.",
+    "type": "analysis",
+    "destructive": false,
+    "max_retries": 3,
+    "current_milestone": "Milestone 6.5 — Project Detail and Project Management UI",
+    "next_task_direction": "Project Workspace Foundation",
+    "expected_flow": [
+        "Read documentation (docs/06_CURRENT_TASK.md)",
+        "Detect current milestone status",
+        "Read next task direction from docs/10_NEXT_TASK.md",
+        "Create execution plan",
+        "Execute analysis step using Coding Agent",
+        "Return structured report"
+    ],
+    "validation_criteria": [
+        "Orchestrator starts successfully",
+        "Documentation is read without errors",
+        "Task plan is generated",
+        "No source code modifications are made",
+        "Final report includes current milestone and next task direction",
+        "TEXT-ONLY LLM check shows NO images sent to Qwen 3.5"
+    ],
+    "safe_test_mode": true,
+    "note": "This is a safe non-destructive test task for validating the Orchestrator runtime."
+}

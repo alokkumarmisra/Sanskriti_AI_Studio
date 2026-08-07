@@ -1,0 +1,5 @@
+-n '#!/usr/bin/env python3'  
+'"""' >> __init__.py && echo 'ai_agents/prompts package.' >> __init__.py && echo '' >> __init__.py && echo 'Version: 1.0.0' >> __init__.py && echo '\"\""'  
+''  
+'__version__ = "1.0.0"'  
+'__all__ = []' 
