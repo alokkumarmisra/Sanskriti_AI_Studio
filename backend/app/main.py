@@ -36,6 +36,15 @@ async def app_info():
     }
 
 
+# Include auth routes
+from app.api.auth import router as auth_router
+app.include_router(auth_router)
+
+# Include projects routes
+from app.api.projects.routes import router as projects_router
+app.include_router(projects_router)
+
+
 @app.get("/api/v1/projects")
 async def list_projects():
     """Retrieve all projects."""
@@ -277,4 +286,137 @@ async def delete_project(project_id: str):
             "success": True,
             "data": [],
             "message": "Project deleted successfully",
+        }
+
+
+# ============================================
+# LYRICS SEARCH ENDPOINT
+# ============================================
+
+@app.get("/api/v1/lyrics/search")
+async def search_lyrics(query: str, project_id: str | None = None):
+    """Search lyrics across all projects or within a specific project."""
+    from app.core.database import engine
+    from sqlalchemy import text
+    
+    if not query:
+        raise HTTPException(status_code=400, detail="Search query is required")
+
+    # Build search query based on whether we want to filter by project
+    if project_id:
+        search_query = f"""
+            SELECT 
+                l.id,
+                p.name as project_name,
+                l.title,
+                l.content,
+                l.language,
+                l.status,
+                l.created_at,
+                l.updated_at
+            FROM lyrics l
+            JOIN projects p ON l.project_id = p.id
+            WHERE LOWER(l.content) LIKE '%' || LOWER(:query) || '%'
+              AND l.project_id = :project_id
+        """
+    else:
+        search_query = f"""
+            SELECT 
+                l.id,
+                p.name as project_name,
+                l.title,
+                l.content,
+                l.language,
+                l.status,
+                l.created_at,
+                l.updated_at
+            FROM lyrics l
+            JOIN projects p ON l.project_id = p.id
+            WHERE LOWER(l.content) LIKE '%' || LOWER(:query) || '%'
+        """
+
+    with engine.connect() as conn:
+        result = conn.execute(
+            text(search_query),
+            {"query": f"%{query}%", "project_id": project_id if project_id else None}
+        )
+        rows = result.fetchall()
+
+        return {
+            "success": True,
+            "data": [
+                {
+                    "id": str(row.id),
+                    "project_name": row.project_name,
+                    "title": row.title,
+                    "content": row.content,
+                    "language": row.language,
+                    "status": row.status,
+                    "created_at": str(row.created_at),
+                    "updated_at": str(row.updated_at),
+                }
+                for row in rows
+            ],
+            "message": f"Found {len(rows)} lyrics matching search",
+        }
+
+
+@app.get("/api/v1/lyrics/{lyrics_id}")
+async def get_lyrics(lyrics_id: str):
+    """Get a specific lyrics entry by ID."""
+    from app.core.database import engine
+    from sqlalchemy import text
+
+    with engine.connect() as conn:
+        result = conn.execute(
+            text("SELECT id, project_id, title, content, language, status FROM lyrics WHERE id = :id"),
+            {"id": lyrics_id}
+        )
+        row = result.fetchone()
+
+        if not row:
+            raise HTTPException(status_code=404, detail="Lyrics not found")
+
+        return {
+            "success": True,
+            "data": [
+                {
+                    "id": str(row.id),
+                    "project_id": row.project_id,
+                    "title": row.title,
+                    "content": row.content,
+                    "language": row.language,
+                    "status": row.status,
+                }
+            ],
+            "message": "Lyrics retrieved successfully",
+        }
+
+
+@app.get("/api/v1/projects/{project_id}/lyrics")
+async def list_project_lyrics(project_id: str):
+    """List all lyrics for a specific project."""
+    from app.core.database import engine
+    from sqlalchemy import text
+
+    with engine.connect() as conn:
+        result = conn.execute(
+            text("SELECT id, title, content, language, status FROM lyrics WHERE project_id = :project_id ORDER BY title"),
+            {"project_id": project_id}
+        )
+        rows = result.fetchall()
+
+        return {
+            "success": True,
+            "data": [
+                {
+                    "id": str(row.id),
+                    "title": row.title,
+                    "content": row.content,
+                    "language": row.language,
+                    "status": row.status,
+                }
+                for row in rows
+            ],
+            "message": f"Found {len(rows)} lyrics for this project",
         }

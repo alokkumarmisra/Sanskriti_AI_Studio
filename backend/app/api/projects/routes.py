@@ -86,7 +86,7 @@ def delete_project(project_id: UUID) -> ProjectsListResponse:
 # ============================================
 
 @router.get("/{project_id}/lyrics", response_model=LyricsListResponse)
-def list_lyrics(project_id: UUID, service: LyricsServiceDep = Depends()) -> LyricsListResponse:
+def list_lyrics(project_id: UUID, service: LyricsServiceDep) -> LyricsListResponse:
     """Retrieve all lyrics for a specific project."""
     lyrics = service.get_lyrics_by_project(str(project_id))
     return LyricsListResponse(
@@ -94,8 +94,8 @@ def list_lyrics(project_id: UUID, service: LyricsServiceDep = Depends()) -> Lyri
     )
 
 
-@router.post("/{project_id}/lyrics", response_model=ProjectsListResponse)
-def create_lyrics(project_id: UUID, lyrics_create: LyricsCreate) -> ProjectsListResponse:
+@router.post("/{project_id}/lyrics", response_model=LyricsListResponse)
+def create_lyrics(project_id: UUID, lyrics_create: LyricsCreate) -> LyricsListResponse:
     """Create a new lyrics entry for a project."""
     service = LyricsService()
     created = service.create_lyrics(
@@ -105,11 +105,11 @@ def create_lyrics(project_id: UUID, lyrics_create: LyricsCreate) -> ProjectsList
         language=lyrics_create.language,
         status=lyrics_create.status,
     )
-    return ProjectsListResponse(data=[LyricsRead.model_validate(created)])
+    return LyricsListResponse(data=[LyricsRead.model_validate(created)])
 
 
-@router.put("/lyrics/{lyrics_id}", response_model=ProjectsListResponse)
-def update_lyrics(lyrics_id: UUID, lyrics_update: LyricsUpdate) -> ProjectsListResponse:
+@router.put("/lyrics/{lyrics_id}", response_model=LyricsListResponse)
+def update_lyrics(lyrics_id: UUID, lyrics_update: LyricsUpdate) -> LyricsListResponse:
     """Update an existing lyrics entry."""
     service = LyricsService()
     
@@ -130,16 +130,16 @@ def update_lyrics(lyrics_id: UUID, lyrics_update: LyricsUpdate) -> ProjectsListR
         kwargs["status"] = lyrics_update.status
     
     updated = service.update_lyrics(str(lyrics_id), **kwargs)
-    return ProjectsListResponse(data=[LyricsRead.model_validate(updated)])
+    return LyricsListResponse(data=[LyricsRead.model_validate(updated)])
 
 
-@router.delete("/lyrics/{lyrics_id}", response_model=ProjectsListResponse)
-def delete_lyrics(lyrics_id: UUID, service: LyricsServiceDep = Depends()) -> ProjectsListResponse:
+@router.delete("/lyrics/{lyrics_id}", response_model=LyricsListResponse)
+def delete_lyrics(lyrics_id: UUID, service: LyricsServiceDep) -> LyricsListResponse:
     """Delete a lyrics entry."""
     deleted = service.delete_lyrics(str(lyrics_id))
     if not deleted:
         raise HTTPException(status_code=404, detail="Lyrics not found")
-    return ProjectsListResponse(data=[], message="Lyrics deleted successfully")
+    return LyricsListResponse(data=[], message="Lyrics deleted successfully")
 
 
 # Pydantic import for LyricsCreate

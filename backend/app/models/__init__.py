@@ -1,6 +1,7 @@
-# Models package for Sanskriti AI Studio backend
+"""App models package."""
 
-from .project import Project, Base as ProjectBase  # noqa: F401
-from .lyrics import Lyrics, Base as LyricsBase  # noqa: F401
+from app.models.project import Base, Project  # noqa: F401
+from app.models.lyrics import Lyrics  # noqa: F401
+from app.models.user import User, AuthSession  # noqa: F401
 
-__all__ = ['Project', 'Lyrics', 'ProjectBase', 'LyricsBase']
+__all__ = ["Base", "Project", "Lyrics", "User", "AuthSession"]
