@@ -12,7 +12,7 @@ export interface Project {
 
 /** Lyrics type definitions. */
 
-export interface Lyrics {
+export interface LyricsItem {
   id: string;
   projectId: string;
   title?: string | null;

@@ -11,6 +11,12 @@ import { Footer } from "./components/Footer";
 import ProjectsPage from "./features/projects/ProjectsPage";
 import { ProjectDetailPage } from "./features/projects/ProjectDetailPage";
 
+// Milestone 6.6 - Dashboard and Workspace Views
+import { DashboardView } from "./features/dashboard/DashboardView";
+import LyricsLibraryView from "./features/lyrics/LyricsLibraryView";
+import ProfileView from "./features/profile/ProfileView";
+import { SettingsView } from "./features/settings/SettingsView";
+
 // Create a single QueryClient instance at the application level (NOT inside component functions)
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,12 +37,21 @@ function App() {
             <Sidebar activeRoute="/projects" />
             <main className="flex-1 overflow-auto bg-muted/20">
               <Routes>
-                <Route path="/" element={<ProjectsPage />} />
+                {/* Default to Dashboard on root path */}
+                <Route path="/" element={<DashboardView />} />
+                
+                {/* Projects Routes */}
                 <Route path="/projects" element={<ProjectsPage />} />
+                <Route path="/assets" element={<div className="p-8"><h1>Assets (Coming Soon)</h1></div>} />
+                
                 {/* Project detail route - uses dynamic routing */}
                 <Route path="/projects/:projectId" element={<ProjectDetailPage />} />
-                <Route path="/assets" element={<div className="p-8"><h1>Assets (Coming Soon)</h1></div>} />
-                <Route path="/settings" element={<div className="p-8"><h1>Settings (Coming Soon)</h1></div>} />
+                
+                {/* Milestone 6.6 New Routes */}
+                <Route path="/dashboard" element={<DashboardView />} />
+                <Route path="/lyrics" element={<LyricsLibraryView />} />
+                <Route path="/profile" element={<ProfileView />} />
+                <Route path="/settings" element={<SettingsView />} />
               </Routes>
             </main>
           </div>
