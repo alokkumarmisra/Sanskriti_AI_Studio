@@ -298,6 +298,14 @@ app.include_router(dashboard_router)
 
 
 # ============================================
+# LYRICS MANAGER ROUTES
+# ============================================
+
+from app.api.lmstudio.routes import router as lmstudio_router
+app.include_router(lmstudio_router)
+
+
+# ============================================
 # LYRICS SEARCH ENDPOINT
 # ============================================
 
