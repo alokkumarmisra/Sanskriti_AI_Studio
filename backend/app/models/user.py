@@ -6,7 +6,7 @@ from uuid import uuid4
 from sqlalchemy import String, DateTime, Boolean, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
-from app.models.project import Base as ProjectBase
+from app.models.project import Project, Base as ProjectBase
 
 
 class Base(DeclarativeBase):
