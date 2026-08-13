@@ -12,7 +12,9 @@ type StatusType =
   | "waiting_for_approval"
   | "skipped"
   | "cancelled"
-  | "unknown";
+  | "unknown"
+  | "disconnected"
+  | "unavailable";
 
 interface StatusBadgeProps {
   status: string;
@@ -30,6 +32,8 @@ const STATUS_CONFIG: Record<string, { color: string; label: string }> = {
   skipped: { color: "bg-gray-100 text-gray-600", label: "Skipped" },
   cancelled: { color: "bg-slate-100 text-slate-600", label: "Cancelled" },
   unknown: { color: "bg-gray-100 text-gray-500", label: "" },
+  disconnected: { color: "bg-yellow-100 text-yellow-800", label: "Disconnected" },
+  unavailable: { color: "bg-red-100 text-red-800", label: "Unavailable" },
 };
 
 export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, size = "md" }) => {
