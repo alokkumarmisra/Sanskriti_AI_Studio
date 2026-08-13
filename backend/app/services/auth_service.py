@@ -84,6 +84,9 @@ class AuthService:
             )
             row = result.fetchone()  # type: ignore[attr-defined]
 
+            if not row:
+                raise ValueError("User not found")
+
             return {
                 "success": True,
                 "data": {
