@@ -5,9 +5,10 @@ import os
 import json
 from typing import Annotated, List, Optional
 from datetime import datetime, timezone
+from enum import StrEnum
 
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 router = APIRouter(prefix="/tasks", tags=["Tasks"])
@@ -23,7 +24,7 @@ class TaskCreate(BaseModel):
     instructions: Optional[str] = Field(None, max_length=2000, description="Optional task instructions")
 
 
-class TaskStatus(str):
+class TaskStatus(StrEnum):
     """Task status enumeration."""
     PENDING = "pending"
     PLANNING = "planning"
@@ -41,6 +42,8 @@ class TaskStatus(str):
 
 class TaskRead(BaseModel):
     """Response schema for task details."""
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+    
     id: str
     project_id: str
     milestone: Optional[str]
@@ -124,9 +127,6 @@ async def create_task(payload: TaskCreate):
     
     # Save to state store
     tasks_dir = "ai_agents/state/tasks"
-    import os
-    import json
-    
     os.makedirs(tasks_dir, exist_ok=True)
     
     task_path = os.path.join(tasks_dir, f"{task_id}.json")
@@ -183,9 +183,6 @@ async def list_tasks(
 @router.get("/{task_id}", response_model=dict)
 async def get_task(task_id: str):
     """Get task details by ID."""
-    import os
-    import json
-    
     task_path = os.path.join("ai_agents/state/tasks", f"{task_id}.json")
     
     if not os.path.exists(task_path):
@@ -203,9 +200,6 @@ async def get_task(task_id: str):
 @router.post("/start/{task_id}", response_model=dict)
 async def start_task(task_id: str):
     """Start a pending task."""
-    import os
-    import json
-    
     task_path = os.path.join("ai_agents/state/tasks", f"{task_id}.json")
     
     if not os.path.exists(task_path):
@@ -236,9 +230,6 @@ async def start_task(task_id: str):
 @router.post("/pause/{task_id}", response_model=dict)
 async def pause_task(task_id: str):
     """Pause a running task."""
-    import os
-    import json
-    
     task_path = os.path.join("ai_agents/state/tasks", f"{task_id}.json")
     
     if not os.path.exists(task_path):
@@ -269,9 +260,6 @@ async def pause_task(task_id: str):
 @router.post("/resume/{task_id}", response_model=dict)
 async def resume_task(task_id: str):
     """Resume a paused task."""
-    import os
-    import json
-    
     task_path = os.path.join("ai_agents/state/tasks", f"{task_id}.json")
     
     if not os.path.exists(task_path):
@@ -302,9 +290,6 @@ async def resume_task(task_id: str):
 @router.post("/cancel/{task_id}", response_model=dict)
 async def cancel_task(task_id: str):
     """Cancel a running task."""
-    import os
-    import json
-    
     task_path = os.path.join("ai_agents/state/tasks", f"{task_id}.json")
     
     if not os.path.exists(task_path):
@@ -335,9 +320,6 @@ async def cancel_task(task_id: str):
 @router.post("/retry/{task_id}", response_model=dict)
 async def retry_task(task_id: str):
     """Retry a failed task."""
-    import os
-    import json
-    
     task_path = os.path.join("ai_agents/state/tasks", f"{task_id}.json")
     
     if not os.path.exists(task_path):
@@ -371,8 +353,6 @@ async def retry_task(task_id: str):
 @router.delete("/{task_id}", response_model=dict)
 async def delete_task(task_id: str):
     """Soft delete a task by moving to graveyard."""
-    import os
-    
     tasks_dir = "ai_agents/state/tasks"
     graveyard_dir = "ai_agents/state/tasks_graveyard"
     

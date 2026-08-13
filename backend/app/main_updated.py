@@ -290,6 +290,14 @@ async def delete_project(project_id: str):
 
 
 # ============================================
+# AGENT MONITORING DASHBOARD ROUTES
+# ============================================
+
+from app.api.dashboard.routes import router as dashboard_router
+app.include_router(dashboard_router)
+
+
+# ============================================
 # LYRICS SEARCH ENDPOINT
 # ============================================
 
@@ -420,10 +428,3 @@ async def list_project_lyrics(project_id: str):
             ],
             "message": f"Found {len(rows)} lyrics for this project",
         }
-""  
-"# ============================================"  
-"# AGENT MONITORING DASHBOARD ROUTES"  
-"# ============================================"  
-"from app.api.dashboard.routes import router as dashboard_router"  
-"app.include_router(dashboard_router)"  
-"" 

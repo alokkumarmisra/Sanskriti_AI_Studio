@@ -1,0 +1,8 @@
+# Add this code block to the END of backend/app/main.py (after line 422):
+
+# ============================================
+# AGENT MONITORING DASHBOARD ROUTES
+# ============================================
+
+from app.api.dashboard.routes import router as dashboard_router
+app.include_router(dashboard_router)

@@ -82,7 +82,7 @@ class AuthService:
                 text("SELECT id, email, role, is_active FROM users WHERE email = :email"),
                 {"email": email.lower().strip()}
             )
-            row = result.fetchone()
+            row = result.fetchone()  # type: ignore[attr-defined]
 
             return {
                 "success": True,
@@ -103,7 +103,7 @@ class AuthService:
                 text("SELECT id, email, password_hash, role FROM users WHERE email = :email"),
                 {"email": email.lower().strip()}
             )
-            row = result.fetchone()
+            row = result.fetchone()  # type: ignore[attr-defined]
 
             if not row or not verify_password(password, row.password_hash):
                 raise ValueError("Invalid credentials")
@@ -159,7 +159,7 @@ class AuthService:
                 text("SELECT id, email, first_name, last_name, role, is_active FROM users WHERE id = :id"),
                 {"id": user_id}
             )
-            row = result.fetchone()
+            row = result.fetchone()  # type: ignore[attr-defined]
 
             if not row:
                 raise ValueError("User not found")
@@ -220,7 +220,7 @@ class AuthService:
                 text("SELECT id, password_hash FROM users WHERE id = :id"),
                 {"id": user_id}
             )
-            row = result.fetchone()
+            row = result.fetchone()  # type: ignore[attr-defined]
 
             if not row or not verify_password(old_password, row.password_hash):
                 raise ValueError("Current password is incorrect")
