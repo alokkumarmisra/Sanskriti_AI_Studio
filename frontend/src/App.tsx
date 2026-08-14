@@ -17,6 +17,9 @@ import LyricsLibraryView from "./features/lyrics/LyricsLibraryView";
 import ProfileView from "./features/profile/ProfileView";
 import { SettingsView } from "./features/settings/SettingsView";
 
+// Milestone 7.2 - Content & Scene Planning Workspace
+import ContentScenePlanningView from "./components/scenes/ScenePlanningWorkspacePage";
+
 // Create a single QueryClient instance at the application level (NOT inside component functions)
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -52,6 +55,10 @@ function App() {
                 <Route path="/lyrics" element={<LyricsLibraryView />} />
                 <Route path="/profile" element={<ProfileView />} />
                 <Route path="/settings" element={<SettingsView />} />
+                
+                {/* Milestone 7.2 - Content & Scene Planning Workspace */}
+                <Route path="/content-scene-planning" element={<ContentScenePlanningView />} />
+                <Route path="/scenes" element={<ContentScenePlanningView />} />
               </Routes>
             </main>
           </div>
