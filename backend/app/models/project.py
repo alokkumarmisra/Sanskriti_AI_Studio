@@ -1,11 +1,15 @@
 """Project model for database storage."""
 
-from datetime import datetime  # noqa: F401
+from datetime import datetime, timezone
 from uuid import UUID, uuid4
+from typing import TYPE_CHECKING
 
 from sqlalchemy import JSON, String, DateTime
-from sqlalchemy.sql.functions import now as func_now  # noqa: F401
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+
+if TYPE_CHECKING:
+    from app.models.lyrics import Lyrics
+    from app.models.scenes import Scene
 
 
 class Base(DeclarativeBase):
@@ -31,11 +35,23 @@ class Project(Base):  # type: ignore[name-defined]
     project_type: Mapped[str] = mapped_column(String(64), default="general")
     status: Mapped[str] = mapped_column(String(32), default="active")
 
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime, server_default=func_now()
-    )
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime, server_default=func_now(), onupdate=func_now()
-    )
-    deleted_at: Mapped[datetime | None] = mapped_column(DateTime)
+    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=True)
+
+    updated_at: Mapped[datetime] = mapped_column(DateTime, nullable=True)
+
+    deleted_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     specs: Mapped[dict | None] = mapped_column(JSON, default=dict)
+
+    # Relationship to Lyrics
+    lyrics: Mapped[list["Lyrics"]] = relationship(
+        "Lyrics",
+        back_populates="project",
+        lazy="dynamic"
+    )
+
+    # Relationship to Scenes
+    scenes: Mapped[list["Scene"]] = relationship(
+        "Scene",
+        back_populates="project",
+        lazy="joined"
+    )
