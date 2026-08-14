@@ -11,7 +11,6 @@ from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.services.project_service import ProjectService
 from app.models.lyrics import Lyrics
-from app.models.scenes import Scene
 
 
 router = APIRouter(prefix="/dashboard", tags=["AI Content Analysis"])
