@@ -13,7 +13,6 @@ from app.services.project_service import ProjectService
 from app.models.lyrics import Lyrics
 
 
-
 router = APIRouter(prefix="/dashboard", tags=["AI Content Analysis"])
 
 
