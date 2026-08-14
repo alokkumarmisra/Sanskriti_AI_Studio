@@ -41,7 +41,7 @@ export function EditProjectDialog({ open, onOpenChange, project, onSave }: EditP
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <form onSubmit={handleSubmit} className="w-full max-w-md p-6 bg-card rounded-lg shadow-xl border animate-in fade-in zoom-in duration-200">
+      <form onSubmit={handleSubmit} className="w-full max-w-md p-6 bg-white rounded-lg shadow-xl border animate-in fade-in zoom-in duration-200">
         <h2 className="text-xl font-semibold mb-4">Edit Project</h2>
 
         {error && (
@@ -105,10 +105,10 @@ export function EditProjectDialog({ open, onOpenChange, project, onSave }: EditP
           </div>
 
           <div className="flex justify-end gap-2 pt-2">
-            <button type="button" onClick={() => onOpenChange(false)} className="px-4 py-2 border rounded-md hover:bg-muted transition-colors">
+            <button type="button" onClick={() => onOpenChange(false)} className="px-4 py-2 border rounded-md hover:bg-secondary transition-colors">
               Cancel
             </button>
-            <button type="submit" disabled={!name.trim()} className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+            <button type="submit" disabled={!name.trim()} className="px-4 py-2 bg-add text-white rounded-md hover:bg-add-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
               Save Changes
             </button>
           </div>

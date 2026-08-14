@@ -28,29 +28,32 @@ async def health_check():
 @app.get("/app/info")
 async def app_info():
     """Application info endpoint."""
-    from app.core.config import config
-    return {
-        "name": "Sanskriti AI Studio",
-        "version": config.API_VERSION,
-        "status": "running",
-    }
+    try:
+        from app.core.config import config
+        return {
+            "name": "Sanskriti AI Studio",
+            "version": getattr(config, "API_VERSION", "1.0.0"),
+            "status": "running",
+        }
+    except ImportError:
+        return {"name": "Sanskriti AI Studio", "version": "1.0.0", "status": "running"}
 
-
-# Include auth routes
-from app.api.auth import router as auth_router
-app.include_router(auth_router)
 
 # Include projects routes
 from app.api.projects.routes import router as projects_router
 app.include_router(projects_router)
 
-# Include scenes/characters/locations routes (Content & Scene Planning) - MILESTONE 7.2 FIX
+# Include scenes/characters/locations routes (Content & Scene Planning)
 from app.api.projects.scenes import router as scenes_router
 app.include_router(scenes_router, prefix="/api/v1")
 
-# Include LM Studio routes (MILESTONE 7.2 FIX)
+# Include LM Studio routes
 from app.api.lmstudio.routes import router as lmstudio_router
 app.include_router(lmstudio_router)
+
+# Include dashboard routes
+from app.api.dashboard.routes import router as dashboard_router
+app.include_router(dashboard_router)
 
 
 @app.get("/api/v1/projects")
@@ -121,29 +124,24 @@ async def create_project(payload: dict):
     """Create a new project."""
     from app.core.database import engine
     from sqlalchemy import text
+    import re
 
-    # Validate required fields
     if not payload.get("name"):
         raise HTTPException(status_code=400, detail="Project name is required")
 
     with engine.connect() as conn:
-        # Generate slug from name (lowercase, spaces/hyphens replaced with hyphens, stripped)
-        import re
         name = payload.get("name", "")
         description = payload.get("description") or None
         project_type = payload.get("project_type", "general")
-        
-        # Use existing slug if provided, otherwise generate from name
         slug = payload.get("slug") if payload.get("slug") else re.sub(r'[^\w\s-]', '', name.lower()).strip().replace(' ', '-')
 
-        # Insert the project
         conn.execute(
             text("""
                 INSERT INTO projects (id, name, description, project_type, status, slug, created_at, updated_at)
                 VALUES (:id, :name, :description, :project_type, :status, :slug, NOW(), NOW())
             """),
             {
-                "id": str(uuid.uuid4()),  # Always generate new UUID
+                "id": str(uuid.uuid4()),
                 "name": name,
                 "description": description,
                 "project_type": project_type,
@@ -153,21 +151,11 @@ async def create_project(payload: dict):
         )
         conn.commit()
 
-        # Fetch the created project
-        # Fetch by slug since we don't have the ID
         result = conn.execute(
             text("SELECT id, name, description, project_type, status, created_at, updated_at FROM projects WHERE slug = :slug ORDER BY id DESC LIMIT 1"),
             {"slug": slug}
         )
         row = result.fetchone()
-
-        if not row:
-            # If UUID generation failed, try fetching by name
-            result = conn.execute(
-                text("SELECT id, name, description, project_type, status, created_at, updated_at FROM projects WHERE slug = :slug"),
-                {"slug": slug}
-            )
-            row = result.fetchone()
 
         if not row:
             raise HTTPException(status_code=500, detail="Failed to create project")
@@ -196,7 +184,6 @@ async def update_project(project_id: str, payload: dict):
     from sqlalchemy import text
 
     with engine.connect() as conn:
-        # Update fields that are provided
         name = payload.get("name")
         description = payload.get("description")
         project_type = payload.get("project_type")
@@ -217,13 +204,11 @@ async def update_project(project_id: str, payload: dict):
         if status is not None:
             update_fields.append("status = :status")
             values["status"] = status
-        # Always update updated_at
         update_fields.append("updated_at = NOW()")
 
         if not update_fields:
             raise HTTPException(status_code=400, detail="No fields to update")
 
-        # First check if project exists
         result = conn.execute(
             text("SELECT id FROM projects WHERE id = :id"),
             {"id": project_id}
@@ -233,7 +218,6 @@ async def update_project(project_id: str, payload: dict):
         if not row:
             raise HTTPException(status_code=404, detail="Project not found")
 
-        # Now update
         values["id"] = project_id
         set_clause = ", ".join(update_fields)
         conn.execute(
@@ -242,7 +226,6 @@ async def update_project(project_id: str, payload: dict):
         )
         conn.commit()
 
-        # Fetch the updated project
         result = conn.execute(
             text("SELECT id, name, description, project_type, status, created_at, updated_at FROM projects WHERE id = :id"),
             {"id": project_id}
@@ -276,7 +259,6 @@ async def delete_project(project_id: str):
     from sqlalchemy import text
 
     with engine.connect() as conn:
-        # Check if project exists
         result = conn.execute(
             text("SELECT id FROM projects WHERE id = :id"),
             {"id": project_id}
@@ -286,7 +268,6 @@ async def delete_project(project_id: str):
         if not row:
             raise HTTPException(status_code=404, detail="Project not found")
 
-        # Delete the project
         conn.execute(text("DELETE FROM projects WHERE id = :id"), {"id": project_id})
         conn.commit()
 
@@ -298,12 +279,91 @@ async def delete_project(project_id: str):
 
 
 # ============================================
-# LYRICS ENDPOINTS - CANONICAL PATH PATTERN
+# LYRICS ENDPOINTS
 # ============================================
 
-@app.get("/api/v1/projects/lyrics/{project_id}")
-async def get_project_lyrics(project_id: str):
-    """List all lyrics for a specific project (CANONICAL path)."""
+@app.get("/api/v1/lyrics/search")
+async def search_lyrics(query: str, project_id: str | None = None):
+    """Search lyrics across all projects or within a specific project."""
+    from app.core.database import engine
+    from sqlalchemy import text
+    
+    if not query:
+        raise HTTPException(status_code=400, detail="Search query is required")
+
+    if project_id:
+        search_query = """
+            SELECT l.id, p.name as project_name, l.title, l.content, l.language, l.status, l.created_at, l.updated_at
+            FROM lyrics l
+            JOIN projects p ON l.project_id = p.id
+            WHERE LOWER(l.content) LIKE :query AND l.project_id = :project_id
+        """
+    else:
+        search_query = """
+            SELECT l.id, p.name as project_name, l.title, l.content, l.language, l.status, l.created_at, l.updated_at
+            FROM lyrics l
+            JOIN projects p ON l.project_id = p.id
+            WHERE LOWER(l.content) LIKE :query
+        """
+
+    with engine.connect() as conn:
+        result = conn.execute(text(search_query), {"query": f"%{query}%", "project_id": project_id if project_id else None})
+        rows = result.fetchall()
+
+        return {
+            "success": True,
+            "data": [
+                {
+                    "id": str(row.id),
+                    "project_name": row.project_name,
+                    "title": row.title,
+                    "content": row.content,
+                    "language": row.language,
+                    "status": row.status,
+                    "created_at": str(row.created_at),
+                    "updated_at": str(row.updated_at),
+                }
+                for row in rows
+            ],
+            "message": f"Found {len(rows)} lyrics matching search",
+        }
+
+
+@app.get("/api/v1/lyrics/{lyrics_id}")
+async def get_lyrics(lyrics_id: str):
+    """Get a specific lyrics entry by ID."""
+    from app.core.database import engine
+    from sqlalchemy import text
+
+    with engine.connect() as conn:
+        result = conn.execute(
+            text("SELECT id, project_id, title, content, language, status FROM lyrics WHERE id = :id"),
+            {"id": lyrics_id}
+        )
+        row = result.fetchone()
+
+        if not row:
+            raise HTTPException(status_code=404, detail="Lyrics not found")
+
+        return {
+            "success": True,
+            "data": [
+                {
+                    "id": str(row.id),
+                    "project_id": row.project_id,
+                    "title": row.title,
+                    "content": row.content,
+                    "language": row.language,
+                    "status": row.status,
+                }
+            ],
+            "message": "Lyrics retrieved successfully",
+        }
+
+
+@app.get("/api/v1/projects/{project_id}/lyrics")
+async def list_project_lyrics(project_id: str):
+    """List all lyrics for a specific project."""
     from app.core.database import engine
     from sqlalchemy import text
 
@@ -335,16 +395,13 @@ async def create_lyrics(project_id: str, payload: dict):
     """Create a new lyrics entry for a project."""
     from app.core.database import engine
     from sqlalchemy import text
-    
-    # Validate required fields
+
     if not payload.get("title"):
         raise HTTPException(status_code=400, detail="Lyrics title is required")
-    
+
     with engine.connect() as conn:
-        # Generate UUID for the new lyrics entry
         id_val = str(uuid.uuid4())
         
-        # Insert the lyrics
         conn.execute(
             text("""
                 INSERT INTO lyrics (id, project_id, title, content, language, status, created_at, updated_at)
@@ -361,7 +418,6 @@ async def create_lyrics(project_id: str, payload: dict):
         )
         conn.commit()
 
-        # Fetch the created lyrics
         result = conn.execute(
             text("SELECT id, project_id, title, content, language, status FROM lyrics WHERE id = :id"),
             {"id": id_val}
@@ -387,93 +443,44 @@ async def create_lyrics(project_id: str, payload: dict):
         }
 
 
-@app.get("/api/v1/lyrics/{lyrics_id}")
-async def get_lyrics_by_id(lyrics_id: str):
-    """Get a specific lyrics entry by ID."""
-    from app.core.database import engine
-    from sqlalchemy import text
-
-    with engine.connect() as conn:
-        result = conn.execute(
-            text("SELECT id, project_id, title, content, language, status FROM lyrics WHERE id = :id"),
-            {"id": lyrics_id}
-        )
-        row = result.fetchone()
-
-        if not row:
-            raise HTTPException(status_code=404, detail="Lyrics not found")
-
-        return {
-            "success": True,
-            "data": [
-                {
-                    "id": str(row.id),
-                    "project_id": row.project_id,
-                    "title": row.title,
-                    "content": row.content,
-                    "language": row.language,
-                    "status": row.status,
-                }
-            ],
-            "message": "Lyrics retrieved successfully",
-        }
-
-
 @app.put("/api/v1/lyrics/{lyrics_id}")
 async def update_lyrics(lyrics_id: str, payload: dict):
     """Update an existing lyrics entry."""
     from app.core.database import engine
     from sqlalchemy import text
-    
+
     with engine.connect() as conn:
-        # First check if lyrics exists
-        result = conn.execute(
-            text("SELECT id FROM lyrics WHERE id = :id"),
-            {"id": lyrics_id}
-        )
+        result = conn.execute(text("SELECT id FROM lyrics WHERE id = :id"), {"id": lyrics_id})
         row = result.fetchone()
 
         if not row:
             raise HTTPException(status_code=404, detail="Lyrics not found")
 
-        # Update fields that are provided
-        name = payload.get("title")
-        content = payload.get("content")
-        language = payload.get("language")
-        status = payload.get("status")
-
         update_fields = []
         values = {}
 
-        if name is not None:
+        if payload.get("title") is not None:
             update_fields.append("title = :name")
-            values["name"] = name
-        if content is not None:
+            values["name"] = payload.get("title")
+        if payload.get("content") is not None:
             update_fields.append("content = :content")
-            values["content"] = content
-        if language is not None:
+            values["content"] = payload.get("content")
+        if payload.get("language") is not None:
             update_fields.append("language = :language")
-            values["language"] = language
-        if status is not None:
+            values["language"] = payload.get("language")
+        if payload.get("status") is not None:
             update_fields.append("status = :status")
-            values["status"] = status
-        
-        # Always update updated_at
+            values["status"] = payload.get("status")
         update_fields.append("updated_at = NOW()")
 
         if not update_fields:
             raise HTTPException(status_code=400, detail="No fields to update")
 
-        # Now update
         values["id"] = lyrics_id
         set_clause = ", ".join(update_fields)
-        conn.execute(
-            text(f"UPDATE lyrics SET {set_clause} WHERE id = :id"),
-            values
-        )
+        conn.execute(text(f"UPDATE lyrics SET {set_clause} WHERE id = :id"), values)
         conn.commit()
 
-        # Fetch the updated lyrics
         result = conn.execute(
             text("SELECT id, project_id, title, content, language, status FROM lyrics WHERE id = :id"),
             {"id": lyrics_id}
@@ -504,19 +511,14 @@ async def delete_lyrics(lyrics_id: str):
     """Delete a lyrics entry."""
     from app.core.database import engine
     from sqlalchemy import text
-    
+
     with engine.connect() as conn:
-        # Check if lyrics exists
-        result = conn.execute(
-            text("SELECT id FROM lyrics WHERE id = :id"),
-            {"id": lyrics_id}
-        )
+        result = conn.execute(text("SELECT id FROM lyrics WHERE id = :id"), {"id": lyrics_id})
         row = result.fetchone()
 
         if not row:
             raise HTTPException(status_code=404, detail="Lyrics not found")
 
-        # Delete the lyrics
         conn.execute(text("DELETE FROM lyrics WHERE id = :id"), {"id": lyrics_id})
         conn.commit()
 
@@ -527,80 +529,3 @@ async def delete_lyrics(lyrics_id: str):
         }
 
 
-# ============================================
-# LYRICS SEARCH ENDPOINT
-# ============================================
-
-@app.get("/api/v1/lyrics/search")
-async def search_lyrics(query: str, project_id: str | None = None):
-    """Search lyrics across all projects or within a specific project."""
-    from app.core.database import engine
-    from sqlalchemy import text
-    
-    if not query:
-        raise HTTPException(status_code=400, detail="Search query is required")
-
-    # Build search query based on whether we want to filter by project
-    if project_id:
-        search_query = f"""
-            SELECT 
-                l.id,
-                p.name as project_name,
-                l.title,
-                l.content,
-                l.language,
-                l.status,
-                l.created_at,
-                l.updated_at
-            FROM lyrics l
-            JOIN projects p ON l.project_id = p.id
-            WHERE LOWER(l.content) LIKE '%' || LOWER(:query) || '%'
-              AND l.project_id = :project_id
-        """
-    else:
-        search_query = f"""
-            SELECT 
-                l.id,
-                p.name as project_name,
-                l.title,
-                l.content,
-                l.language,
-                l.status,
-                l.created_at,
-                l.updated_at
-            FROM lyrics l
-            JOIN projects p ON l.project_id = p.id
-            WHERE LOWER(l.content) LIKE '%' || LOWER(:query) || '%'
-        """
-
-    with engine.connect() as conn:
-        result = conn.execute(
-            text(search_query),
-            {"query": f"%{query}%", "project_id": project_id if project_id else None}
-        )
-        rows = result.fetchall()
-
-        return {
-            "success": True,
-            "data": [
-                {
-                    "id": str(row.id),
-                    "project_name": row.project_name,
-                    "title": row.title,
-                    "content": row.content,
-                    "language": row.language,
-                    "status": row.status,
-                    "created_at": str(row.created_at),
-                    "updated_at": str(row.updated_at),
-                }
-                for row in rows
-            ],
-            "message": f"Found {len(rows)} lyrics matching search",
-        }
-
-
-# ============================================
-# AGENT MONITORING DASHBOARD ROUTES
-# ============================================
-from app.api.dashboard.routes import router as dashboard_router
-app.include_router(dashboard_router)
