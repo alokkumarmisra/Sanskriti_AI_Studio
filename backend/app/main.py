@@ -44,6 +44,14 @@ app.include_router(auth_router)
 from app.api.projects.routes import router as projects_router
 app.include_router(projects_router)
 
+# Include scenes/characters/locations routes (Content & Scene Planning) - MILESTONE 7.2 FIX
+from app.api.projects.scenes import router as scenes_router
+app.include_router(scenes_router, prefix="/api/v1")
+
+# Include LM Studio routes (MILESTONE 7.2 FIX)
+from app.api.lmstudio.routes import router as lmstudio_router
+app.include_router(lmstudio_router)
+
 
 @app.get("/api/v1/projects")
 async def list_projects():
@@ -420,10 +428,10 @@ async def list_project_lyrics(project_id: str):
             ],
             "message": f"Found {len(rows)} lyrics for this project",
         }
-""  
-"# ============================================"  
-"# AGENT MONITORING DASHBOARD ROUTES"  
-"# ============================================"  
-"from app.api.dashboard.routes import router as dashboard_router"  
-"app.include_router(dashboard_router)"  
-"" 
+
+
+# ============================================
+# AGENT MONITORING DASHBOARD ROUTES
+# ============================================
+from app.api.dashboard.routes import router as dashboard_router
+app.include_router(dashboard_router)
