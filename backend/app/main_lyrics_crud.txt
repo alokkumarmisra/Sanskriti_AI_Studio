@@ -1,0 +1,167 @@
+# Add these endpoints to backend/app/main.py after line 437:
+
+@app.post("/api/v1/projects/{project_id}/lyrics")
+async def create_lyrics(project_id: str, payload: dict):
+    """Create a new lyrics entry for a project."""
+    from app.core.database import engine
+    from sqlalchemy import text
+    
+    # Validate required fields
+    if not payload.get("title"):
+        raise HTTPException(status_code=400, detail="Lyrics title is required")
+    
+    with engine.connect() as conn:
+        # Generate UUID for the new lyrics entry
+        id_val = str(uuid.uuid4())
+        
+        # Insert the lyrics
+        conn.execute(
+            text("""
+                INSERT INTO lyrics (id, project_id, title, content, language, status, created_at, updated_at)
+                VALUES (:id, :project_id, :title, :content, :language, :status, NOW(), NOW())
+            """),
+            {
+                "id": id_val,
+                "project_id": project_id,
+                "title": payload.get("title"),
+                "content": payload.get("content") or "",
+                "language": payload.get("language") or "English",
+                "status": payload.get("status") or "draft",
+            }
+        )
+        conn.commit()
+
+        # Fetch the created lyrics
+        result = conn.execute(
+            text("SELECT id, project_id, title, content, language, status FROM lyrics WHERE id = :id"),
+            {"id": id_val}
+        )
+        row = result.fetchone()
+
+        if not row:
+            raise HTTPException(status_code=500, detail="Failed to create lyrics")
+
+        return {
+            "success": True,
+            "data": [
+                {
+                    "id": str(row.id),
+                    "project_id": row.project_id,
+                    "title": row.title,
+                    "content": row.content,
+                    "language": row.language,
+                    "status": row.status,
+                }
+            ],
+            "message": "Lyrics created successfully",
+        }
+
+
+@app.put("/api/v1/lyrics/{lyrics_id}")
+async def update_lyrics(lyrics_id: str, payload: dict):
+    """Update an existing lyrics entry."""
+    from app.core.database import engine
+    from sqlalchemy import text
+    
+    with engine.connect() as conn:
+        # First check if lyrics exists
+        result = conn.execute(
+            text("SELECT id FROM lyrics WHERE id = :id"),
+            {"id": lyrics_id}
+        )
+        row = result.fetchone()
+
+        if not row:
+            raise HTTPException(status_code=404, detail="Lyrics not found")
+
+        # Update fields that are provided
+        name = payload.get("title")
+        content = payload.get("content")
+        language = payload.get("language")
+        status = payload.get("status")
+
+        update_fields = []
+        values = {}
+
+        if name is not None:
+            update_fields.append("title = :name")
+            values["name"] = name
+        if content is not None:
+            update_fields.append("content = :content")
+            values["content"] = content
+        if language is not None:
+            update_fields.append("language = :language")
+            values["language"] = language
+        if status is not None:
+            update_fields.append("status = :status")
+            values["status"] = status
+        
+        # Always update updated_at
+        update_fields.append("updated_at = NOW()")
+
+        if not update_fields:
+            raise HTTPException(status_code=400, detail="No fields to update")
+
+        # Now update
+        values["id"] = lyrics_id
+        set_clause = ", ".join(update_fields)
+        conn.execute(
+            text(f"UPDATE lyrics SET {set_clause} WHERE id = :id"),
+            values
+        )
+        conn.commit()
+
+        # Fetch the updated lyrics
+        result = conn.execute(
+            text("SELECT id, project_id, title, content, language, status FROM lyrics WHERE id = :id"),
+            {"id": lyrics_id}
+        )
+        row = result.fetchone()
+
+        if not row:
+            raise HTTPException(status_code=404, detail="Lyrics not found after update")
+
+        return {
+            "success": True,
+            "data": [
+                {
+                    "id": str(row.id),
+                    "project_id": row.project_id,
+                    "title": row.title,
+                    "content": row.content,
+                    "language": row.language,
+                    "status": row.status,
+                }
+            ],
+            "message": "Lyrics updated successfully",
+        }
+
+
+@app.delete("/api/v1/lyrics/{lyrics_id}")
+async def delete_lyrics(lyrics_id: str):
+    """Delete a lyrics entry."""
+    from app.core.database import engine
+    from sqlalchemy import text
+    
+    with engine.connect() as conn:
+        # Check if lyrics exists
+        result = conn.execute(
+            text("SELECT id FROM lyrics WHERE id = :id"),
+            {"id": lyrics_id}
+        )
+        row = result.fetchone()
+
+        if not row:
+            raise HTTPException(status_code=404, detail="Lyrics not found")
+
+        # Delete the lyrics
+        conn.execute(text("DELETE FROM lyrics WHERE id = :id"), {"id": lyrics_id})
+        conn.commit()
+
+        return {
+            "success": True,
+            "data": [],
+            "message": "Lyrics deleted successfully",
+        }
+
+

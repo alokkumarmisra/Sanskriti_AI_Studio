@@ -183,33 +183,37 @@ export function ProjectDetailPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <button
           onClick={() => navigate("/projects")}
-          className="self-start px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground rounded-md transition-colors"
+          className="self-start px-4 py-2 bg-secondary text-secondary-dark rounded-md hover:bg-gray-200 transition-colors font-medium text-sm flex items-center gap-2"
         >
           ← Back to Projects
         </button>
         
-        <div className="flex items-center gap-2">
-          {/* Edit Button */}
+        <div className="flex items-center gap-3">
+          {/* Edit Button - Blue for edit action */}
           <button
             onClick={handleOpenEdit}
             disabled={!project || isDeleting}
-            className="px-4 py-2 border rounded-md hover:bg-muted transition-colors font-medium flex items-center gap-2"
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium flex items-center gap-2"
+            title="Edit Project"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4"/>
             </svg>
             Edit Project
           </button>
           
-          {/* Delete Button */}
+          {/* Delete Button - Red for destructive action */}
           <button
             onClick={handleOpenDelete}
             disabled={!project || isDeleting}
-            className="px-4 py-2 border border-destructive rounded-md hover:bg-destructive/10 transition-colors font-medium text-destructive flex items-center gap-2"
+            className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors font-medium flex items-center gap-2"
+            title="Delete Project"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M5 7h14M5 7v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7m-9 4h4" />
-              <line x1="9" y1="22" x2="15" y2="22" />
+              <path d="M5 7h14"/>
+              <path d="M5 7v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7"/>
+              <line x1="9" y1="22" x2="15" y2="22"/>
             </svg>
             Delete Project
           </button>
