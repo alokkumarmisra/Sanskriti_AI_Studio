@@ -5,8 +5,10 @@ from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 import requests
 
-from app.api.lmstudio.service import LMStudioManager
-from app.api.comfyui.service_final import ComfyUIManager
+# From workspace root: backend/app/api/models/
+# Need to go up two levels to reach backend/app/, then into api/lmstudio/
+from backend.app.api.lmstudio.service import LMStudioManager  # type: ignore[import-not-found]
+from backend.app.api.comfyui.service_final import ComfyUIManager  # type: ignore[import-not-found]
 
 
 class UnifiedModelManager:
